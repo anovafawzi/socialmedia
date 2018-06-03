@@ -16,6 +16,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var repo = dbFactory.NewSQLiteRepository("./dbsocmed.db")
+
 func performRequest(r http.Handler, method, path string, body io.Reader) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(method, path, body)
 	req.Header.Set("Content-Type", "application/json")
@@ -50,14 +52,14 @@ func TestPostFriendConnection(t *testing.T) {
 	assert.Equal(t, body["success"], result.Success)
 
 	// clean data
-	db := dbFactory.InitDb()
+	db := repo.InitDb()
 	defer db.Close()
 	db.Where("(email1 = ? AND email2 = ?) OR (email1 = ? AND email2 = ?)", "andy@example.com", "john@example.com", "john@example.com", "andy@example.com").Delete(models.Relations{})
 }
 
 func TestPostFriendList(t *testing.T) {
 	// create initial data
-	db := dbFactory.InitDb()
+	db := repo.InitDb()
 	defer db.Close()
 
 	email1 := "andy@example.com"
@@ -102,7 +104,7 @@ func TestPostFriendList(t *testing.T) {
 
 func TestPostFriendCommonList(t *testing.T) {
 	// create initial data
-	db := dbFactory.InitDb()
+	db := repo.InitDb()
 	defer db.Close()
 
 	email1 := "andy@example.com"
@@ -153,7 +155,7 @@ func TestPostFriendCommonList(t *testing.T) {
 
 func TestPostFriendSubscribe(t *testing.T) {
 	// create initial data
-	db := dbFactory.InitDb()
+	db := repo.InitDb()
 	defer db.Close()
 
 	email1 := "lisa@example.com"
@@ -199,7 +201,7 @@ func TestPostFriendSubscribe(t *testing.T) {
 
 func TestPostFriendBlock(t *testing.T) {
 	// create initial data
-	db := dbFactory.InitDb()
+	db := repo.InitDb()
 	defer db.Close()
 
 	email1 := "andy@example.com"
@@ -245,7 +247,7 @@ func TestPostFriendBlock(t *testing.T) {
 
 func TestPostFriendUpdates(t *testing.T) {
 	// create initial data
-	db := dbFactory.InitDb()
+	db := repo.InitDb()
 	defer db.Close()
 
 	email1 := "john@example.com"

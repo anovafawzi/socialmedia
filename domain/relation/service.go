@@ -10,11 +10,19 @@ import (
 
 // Service : service for relation domain
 type Service struct {
+	repo dbFactory.Repository
+}
+
+// NewService : create new service
+func NewService(r dbFactory.Repository) *Service {
+	return &Service{
+		repo: r,
+	}
 }
 
 // CreateFriendConnection : create friend connection
-func (service *Service) CreateFriendConnection(c *gin.Context) (models.Result, string) {
-	db := dbFactory.InitDb()
+func (s *Service) CreateFriendConnection(c *gin.Context) (models.Result, string) {
+	db := s.repo.InitDb()
 	defer db.Close()
 
 	// get parameter input
@@ -63,9 +71,9 @@ func (service *Service) CreateFriendConnection(c *gin.Context) (models.Result, s
 }
 
 // GetFriendList : get friend list based on email address
-func (service *Service) GetFriendList(c *gin.Context) (models.Result, string) {
+func (s *Service) GetFriendList(c *gin.Context) (models.Result, string) {
 	// Connection to the database
-	db := dbFactory.InitDb()
+	db := s.repo.InitDb()
 	// Close connection database
 	defer db.Close()
 
@@ -89,8 +97,8 @@ func (service *Service) GetFriendList(c *gin.Context) (models.Result, string) {
 }
 
 // GetFriendCommonList : get common friends list between two email addresses
-func (service *Service) GetFriendCommonList(c *gin.Context) (models.Result, string) {
-	db := dbFactory.InitDb()
+func (s *Service) GetFriendCommonList(c *gin.Context) (models.Result, string) {
+	db := s.repo.InitDb()
 	defer db.Close()
 
 	// get parameter input
@@ -120,8 +128,8 @@ func (service *Service) GetFriendCommonList(c *gin.Context) (models.Result, stri
 }
 
 // SubscribeFriend : subscribe to a friend
-func (service *Service) SubscribeFriend(c *gin.Context) (models.Result, string) {
-	db := dbFactory.InitDb()
+func (s *Service) SubscribeFriend(c *gin.Context) (models.Result, string) {
+	db := s.repo.InitDb()
 	defer db.Close()
 
 	// get parameter input
@@ -145,8 +153,8 @@ func (service *Service) SubscribeFriend(c *gin.Context) (models.Result, string) 
 }
 
 // BlockFriend : block updates from an email address
-func (service *Service) BlockFriend(c *gin.Context) (models.Result, string) {
-	db := dbFactory.InitDb()
+func (s *Service) BlockFriend(c *gin.Context) (models.Result, string) {
+	db := s.repo.InitDb()
 	defer db.Close()
 
 	// get parameter input
@@ -178,8 +186,8 @@ func (service *Service) BlockFriend(c *gin.Context) (models.Result, string) {
 }
 
 // MentionFriend : retrieve all email addresses that can receive updates from an email address
-func (service *Service) MentionFriend(c *gin.Context) (models.Result, string) {
-	db := dbFactory.InitDb()
+func (s *Service) MentionFriend(c *gin.Context) (models.Result, string) {
+	db := s.repo.InitDb()
 	defer db.Close()
 
 	// get parameter input

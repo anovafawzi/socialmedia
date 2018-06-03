@@ -1,7 +1,8 @@
 package server
 
 import (
-	relation "github.com/anovafawzi/socialmedia/domain/relation"
+	"github.com/anovafawzi/socialmedia/db"
+	"github.com/anovafawzi/socialmedia/domain/relation"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,7 +26,10 @@ func LoadRoute() *gin.Engine {
 	r := gin.Default()
 
 	// create controller
-	var relationController relation.Controller
+	var (
+		sqliteRepo         = db.NewSQLiteRepository("./dbsocmed.db")
+		relationController = relation.NewController(sqliteRepo)
+	)
 
 	r.Use(Cors())
 	v1 := r.Group("api/v1")
